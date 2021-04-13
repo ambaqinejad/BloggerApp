@@ -25,6 +25,10 @@
     <hr>
     <a href="/dashboard/modifyInformation">Modify Information</a>
     <hr>
-    <a href="/dashboard/logout">Logout</a>
-    <hr>
+    <% if(blogger.role === 'admin') { %>
+        <a href="/dashboard/getBloggers">Get Bloggers</a>
+        <hr>
+        <% } %>
+            <a href="/dashboard/logout">Logout</a>
+            <hr>
 </div>

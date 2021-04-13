@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+    </title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/dashboard/sidenav.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <div class="container-fluid">
+        <nav>
+            <%- include('./partials/navbar.ejs', {
+                title: ''
+            }) %>
+        </nav>
+
+
+        <%- include('./partials/sidenav.ejs', {
+            blogger
+        }) %>
+            <main class="p-3">
+                <div class="row">
+                    <div class="d-flex justify-content-center">
+                        <p>
+                            <%= message %>
+                        </p>
+                    </div>
+                    <% bloggers.forEach(blogger => { %>
+                        <div class="col-sm-12 col-md-6 col-lg-4 pb-4 ps-4 pe-4">
+                            <div class="card p-3">
+                                <img src="<%=blogger.avatar ? `images/avatars/${blogger.avatar}` : " images/avatars/default.jpg "%>" class="card-img-top blogger-avatar_container-in-bloggers-page" alt="...">
+                                <div class="card-body text-center">
+                                    <p class="card-text"><strong>First Name: </strong>
+                                        <%= blogger.firstName %>
+                                    </p>
+                                    <p class="card-text"><strong>Last Name: </strong>
+                                        <%= blogger.lastName %>
+                                    </p>
+                                    <p class="card-text"><strong>Username: </strong>
+                                        <%= blogger.username %>
+                                    </p>
+                                    <p class="card-text"><strong>Email: </strong>
+                                        <%= blogger.email %>
+                                    </p>
+                                    <p class="card-text"><strong>Phone: </strong>
+                                        <%= blogger.phone %>
+                                    </p>
+                                    <p class="card-text"><strong>Gender: </strong>
+                                        <%= blogger.gender %>
+                                    </p>
+                                    <div class="d-flex justify-content-center">
+                                        <a href="/dashboard/showBloggerPosts/<%= blogger._id %>" class="btn btn-success m-2">Show Posts</a>
+                                    </div>
+                                    <div class="d-flex justify-content-center">
+                                        <a href="/dashboard/resetPassword/<%= blogger._id %>" class="btn btn-warning m-2">Reset Password</a>
+                                    </div>
+                                    <div class="d-flex justify-content-center">
+                                        <a href="/dashboard/deleteBlogger/<%= blogger._id %>" class="btn btn-danger m-2">Delete Blogger</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <% }) %>
+                </div>
+            </main>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="js/dashboard/sidenav.js"></script>
+</body>
+
+</html>

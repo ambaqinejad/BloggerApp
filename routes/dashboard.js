@@ -30,9 +30,13 @@ router.get('/modifyInformation',
     validator.isNumber('phone', '/dashboard/modifyInformation'),
     dashboardController.getModifyInformationPage);
 
+router.get('/getBloggers', dashboardController.getBloggersPage);
+
 router.get('/logout', dashboardController.logout);
 
 router.get('/articleDetail/:articleID', dashboardController.getDetailPage)
+
+router.get('/resetPassword/:bloggerID', dashboardController.resetBloggerPassword)
 
 router.post('/getArticle', dashboardController.getArticle)
 

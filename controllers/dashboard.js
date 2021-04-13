@@ -90,6 +90,43 @@ const getDetailPage = (req, res, next) => {
     })
 }
 
+const resetBloggerPassword = async(req, res, next) => {
+    const bloggerID = req.params.bloggerID;
+    let blogger;
+    try {
+        blogger = await Blogger.findById(bloggerID);
+    } catch (err) {
+        return redirect(res, '/dashboard/getBloggers', 'Something went wrong.')
+    }
+    Blogger.updateOne({ _id: bloggerID }, { password: blogger.phone }, err => {
+        if (err) {
+            return redirect(res, '/dashboard/getBloggers', 'Something went wrong.')
+        }
+        return redirect(res, '/dashboard/getBloggers', 'Updated Successfully.')
+    })
+}
+
+const getBloggersPage = (req, res) => {
+    Blogger.find({ role: 'blogger' }, {
+        password: 0,
+        _v: 0
+    }, (err, bloggers) => {
+        if (err) {
+            return res.render('bloggers.ejs', {
+                err: 'Could not to retrieve bloggers information. Something went wrong.',
+                detailError: ""
+            });
+        }
+        res.render('bloggers.ejs', {
+            err: '',
+            blogger: req.session.blogger,
+            bloggers,
+            detailError: req.query.detailError || '',
+            message: req.query.message || ''
+        })
+    })
+}
+
 const getArticle = (req, res, next) => {
     const articleID = req.body.articleID;
     Article.findById(articleID).populate('postedBy')
@@ -265,7 +302,9 @@ module.exports = {
     getWhoAmIPage,
     getModifyInformationPage,
     getDetailPage,
+    getBloggersPage,
     getArticle,
+    resetBloggerPassword,
     updateBlogger,
     logout,
     uploadAvatar,

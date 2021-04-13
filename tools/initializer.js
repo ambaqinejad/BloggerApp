@@ -21,6 +21,7 @@ module.exports = (function() {
         email: 'admin@yahoo.com',
         phone: '+989355919223',
         gender: 'male',
+        role: 'admin',
         avatar: null
     }).save(err => {
         if (err) {
