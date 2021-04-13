@@ -1,0 +1,30 @@
+<div id="mySidenav" class="sidenav">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <hr>
+    <div class="d-flex justify-content-around">
+        <img src="<%=blogger.avatar ? `images/avatars/${blogger.avatar}` : " images/avatars/default.jpg "%>" alt="" id="avatar_container" class="mb-2">
+        <form id="avatarForm" action="/dashboard/uploadAvatar" method="post" enctype="multipart/form-data" class="d-flex flex-column align-items-center">
+            <label for="avatar-selection">
+                <i class="fa fa-camera camera">  Add New</i>
+            </label>
+            <p id="avatar-name" class="text-success text-center"></p>
+            <p id="no-avatar-error" class="text-danger text-center"></p>
+            <input type="file" name="avatar" id="avatar-selection" class="d-none" />
+            <input type="submit" value="Save" id="uploadAvatar" />
+        </form>
+    </div>
+    <p id="avatar-error" class="text-center text-danger"></p>
+    <hr>
+    <a href="/dashboard">All Posts</a>
+    <hr>
+    <a href="/dashboard/myPosts">My Posts</a>
+    <hr>
+    <a href="/dashboard/newPost">Add New Post</a>
+    <hr>
+    <a href="/dashboard/whoAmI">Who am I?</a>
+    <hr>
+    <a href="/dashboard/modifyInformation">Modify Information</a>
+    <hr>
+    <a href="/dashboard/logout">Logout</a>
+    <hr>
+</div>

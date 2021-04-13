@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+    </title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="//cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <link href="https://unpkg.com/quill-image-uploader@1.2.1/dist/quill.imageUploader.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/dashboard/sidenav.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div class="container-fluid">
+        <nav>
+            <%- include('./partials/navbar.ejs', {
+                title: ''
+            }) %>
+        </nav>
+
+
+        <%- include('./partials/sidenav.ejs', {
+            blogger
+        }) %>
+
+            <main class="p-1">
+                <div class="row">
+                    <div class="col"></div>
+                    <div class="col-sm-12 col-md-10 col-lg-8">
+                        <form action="/dashboard/saveUpdatePost" method="post" id="postForm">
+                            <input type="text" class="d-none" id="articleId" name="articleId">
+                            <label for="title">Title</label><span class="ms-3 text-danger" id="titleError"></span>
+                            <div class="d-flex mb-1 justify-contentd-between">
+                                <div class="p-1 col-sm-8 col-md-6 col-lg-7">
+                                    <input type="text" class="form-control" id="title" name="title">
+                                </div>
+                                <!-- <div class="p-1 col-sm-4 col-md-6 col-lg-5">
+                                    <label for="postHeaderImage" class="c-pointer"><i class="fa fa-camera"></i> Choose the Post Image</label>
+                                </div> -->
+                            </div>
+                            <div class="mb-3">
+                                <label for="description">Description</label><span class="ms-3 text-danger" id="descriptionError"></span>
+                                <input type="text" class="form-control" id="description" name="description">
+                            </div>
+                            <input name="content" type="hidden" id="content">
+                            <input name="htmlContent" type="hidden" id="htmlContent">
+                            <div id="editor" style="height: 400px;" class="mb-1"></div>
+                            <!-- <input type="file" class="form-control d-none" id="postHeaderImage" name="postHeaderImage"> -->
+                            <div class="d-flex justify-content-between align-items-baseline">
+                                <button class="btn btn-primary" type="submit" id="postBtn">Post the Article</button>
+                                <span class="mt-3 text-danger"><%= message %></span>
+                            </div>
+                        </form>
+                        <p id="error" class="text-danger"></p>
+                    </div>
+                    <div class="col"></div>
+                </div>
+            </main>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="//cdn.quilljs.com/1.3.6/quill.js"></script>
+    <script src="//cdn.quilljs.com/1.3.6/quill.min.js"></script>
+    <script src="https://unpkg.com/quill-image-uploader@1.2.1/dist/quill.imageUploader.min.js"></script>
+    <script src="js/dashboard/sidenav.js"></script>
+    <script src="js/quill/updateEditor.js"></script>
+</body>
+
+</html>
