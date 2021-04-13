@@ -38,6 +38,8 @@ router.get('/articleDetail/:articleID', dashboardController.getDetailPage)
 
 router.get('/resetPassword/:bloggerID', dashboardController.resetBloggerPassword)
 
+router.get('/deleteBlogger/:bloggerID', dashboardController.deleteBlogger)
+
 router.post('/getArticle', dashboardController.getArticle)
 
 router.post('/update', dashboardController.updateBlogger);

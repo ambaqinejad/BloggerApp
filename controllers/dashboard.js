@@ -294,6 +294,34 @@ const deletePost = async(req, res, next) => {
     }
 }
 
+const deleteBlogger = async(req, res, next) => {
+    const bloggerID = req.params.bloggerID;
+    try {
+        const blogger = await Blogger.findById(bloggerID);
+        const articles = await Article.find({ postedBy: bloggerID })
+
+        // delete Blogger
+        await Blogger.findByIdAndDelete(bloggerID);
+        // delete Articles
+        await Article.deleteMany({ postedBy: bloggerID });
+        // delete blogger avatar
+        fs.unlinkSync(path.join(process.cwd(), 'public', 'images', 'avatars', blogger.avatar));
+        // delete header images and post images
+        articles.forEach(article => {
+            fs.unlinkSync(path.join(process.cwd(), 'public', 'images', 'post_header_image', article.image));
+            const contents = JSON.parse(article.content);
+            contents.ops.forEach(content => {
+                if (content.insert.image) {
+                    fs.unlinkSync(path.join(process.cwd(), 'public', content.insert.image))
+                }
+            })
+        })
+        return redirect(res, '/dashboard/getBloggers', 'Blogger deleted successfully.')
+    } catch (err) {
+        return redirect(res, '/dashboard/getBloggers', 'Something went wrong.')
+    }
+}
+
 module.exports = {
     getDashboardPage,
     getMyPostsPage,
@@ -312,5 +340,6 @@ module.exports = {
     saveUpdatePost,
     uploadPostImage,
     deletePostImage,
-    deletePost
+    deletePost,
+    deleteBlogger
 }
