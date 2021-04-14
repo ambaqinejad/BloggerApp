@@ -35,7 +35,9 @@ const getDashboardPage = (req, res, next) => {
 }
 
 const getMyPostsPage = (req, res, next) => {
-    Article.find({ postedBy: req.session.blogger._id }).populate('postedBy', {
+    const bloggerID = req.params.bloggerID;
+    console.log('a', bloggerID);
+    Article.find({ postedBy: bloggerID }).populate('postedBy', {
         firstName: true,
         lastName: true,
         username: true,
@@ -255,7 +257,7 @@ const uploadPost = (req, res, next) => {
             if (err) {
                 return redirect(res, '/dashboard/newPost', 'Something went wrong.')
             }
-            return res.redirect('/dashboard/myPosts');
+            return res.redirect(`/dashboard/myPosts/${req.session.blogger._id}`);
         })
     })
 }

@@ -12,10 +12,11 @@ const router = express.Router();
 
 router.use(express.static(path.join(process.cwd(), 'public')));
 router.use('/articleDetail', express.static(path.join(process.cwd(), 'public')));
+router.use('/myPosts', express.static(path.join(process.cwd(), 'public')));
 
 router.get('/', dashboardController.getDashboardPage);
 
-router.get('/myPosts', dashboardController.getMyPostsPage);
+router.get('/myPosts/:bloggerID', dashboardController.getMyPostsPage);
 
 router.get('/newPost', dashboardController.getNewPostPage);
 

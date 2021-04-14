@@ -6,6 +6,7 @@ $(document).ready(function() {
             quill.disable();
 
             let bloggerId = $("#bloggerId").html().trim();
+            let role = $("#admin").html().trim();
 
             let articleID = window.location.href.split("/");
             articleID = articleID[articleID.length - 1];
@@ -26,6 +27,12 @@ $(document).ready(function() {
             if(article.article.postedBy._id === bloggerId) {
                 let modifyingPart = `
                     <a id="updatePostBtn" href="/dashboard/updatePost?articleId=${article.article._id}" class="btn btn-primary">Update</a>
+                    <button type="button" id="deletePostBtn" onclick="_delete('${article.article._id}')" class="btn btn-danger">Delete</button>
+                `
+                $('#modifyingPart').html(modifyingPart);
+            }
+            if(role === 'admin') {
+                let modifyingPart = `
                     <button type="button" id="deletePostBtn" onclick="_delete('${article.article._id}')" class="btn btn-danger">Delete</button>
                 `
                 $('#modifyingPart').html(modifyingPart);
