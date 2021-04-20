@@ -93,6 +93,27 @@ function _delete(articleId) {
     }
 }
 
+function _deleteComment(commentID) {
+    let ok = confirm("Are you sure?");
+    if(ok) {
+        fetch('/dashboard/deleteComment', {
+            method: 'DELETE',
+            body: JSON.stringify({
+                commentID,
+                url: window.location.href
+            }),
+            headers: {'Content-Type': 'application/json'}
+        })
+        .then(response => response.json())
+        .then(response => {
+            window.location.href = response.url;
+        })
+        .catch(err => {
+            $('#error').text(err.message)
+        })
+    }
+}
+
 function getComments() {
     fetch(`/dashboard/getCommentsOf`, {
         body: JSON.stringify({articleID}),
@@ -116,8 +137,8 @@ function getComments() {
                      </div>
                      <div class='d-flex align-items-end'>
                          <img src="${comment.commentedBy.avatar ? `images/avatars/${comment.commentedBy.avatar}` : "images/avatars/default.jpg"}" alt="" class="me-2 comment-img"> 
-                         <p class="me-2">${comment.commentedBy.username}</p>
-                         <p>${comment.createdAt.substring(0, 10)}</p>
+                         <p class="me-2"><strong><em>${comment.commentedBy.username}</em></strong></p>
+                         <p><em>${comment.createdAt.substring(0, 10)}</em></p>
 
                     </div>
                 </div>
@@ -125,7 +146,7 @@ function getComments() {
             if(role === 'admin') {
                 commentsContents += `
                     <div class="d-flex justify-content-end">
-                        <button type="button" id="deleteCommentBtn" class="btn btn-danger mb-2">Delete Comment</button>
+                        <button type="button" id="deleteCommentBtn" onclick="_deleteComment('${comment._id}')" class="btn btn-danger mb-2">Delete Comment</button>
                     </div>
                 `
             }

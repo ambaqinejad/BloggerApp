@@ -275,6 +275,20 @@ const deletePostImage = (req, res) => {
     })
 }
 
+const deleteComment = async(req, res) => {
+    try {
+        await Comment.deleteOne({ _id: req.body.commentID })
+        return res.json({
+            message: 'Deleted successfully.',
+            url: req.body.url
+        })
+    } catch (err) {
+        return res.status(500).json({
+            message: err.message
+        })
+    }
+}
+
 const uploadPost = (req, res, next) => {
     const upload = multerInitializer.uploadPostHeaderImage.single('postHeaderImage');
     upload(req, res, err => {
@@ -389,5 +403,6 @@ module.exports = {
     uploadPostImage,
     deletePostImage,
     deletePost,
+    deleteComment,
     deleteBlogger
 }

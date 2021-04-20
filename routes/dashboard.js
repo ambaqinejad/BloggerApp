@@ -61,4 +61,6 @@ router.post('/getCommentsOf', dashboardController.getCommentsOf)
 
 router.delete('/deletePost', dashboardController.deletePost);
 
+router.delete('/deleteComment', dashboardController.deleteComment);
+
 module.exports = router;
