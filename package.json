@@ -9,7 +9,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/ambaqinejad/Amir_Hosein_Baqinejad_Qazvini_hw21_maktab45.git"
+        "url": "git+https://github.com/ambaqinejad/BloggerApp.git"
     },
     "keywords": [
         "express",
@@ -27,9 +27,9 @@
     "author": "Amir Hosein Baqinejad (ambaqinejad)",
     "license": "ISC",
     "bugs": {
-        "url": "https://github.com/ambaqinejad/Amir_Hosein_Baqinejad_Qazvini_hw21_maktab45/issues"
+        "url": "https://github.com/ambaqinejad/BloggerApp/issues"
     },
-    "homepage": "https://github.com/ambaqinejad/Amir_Hosein_Baqinejad_Qazvini_hw21_maktab45#readme",
+    "homepage": "https://github.com/ambaqinejad/BloggerApp#readme",
     "dependencies": {
         "bcrypt": "^5.0.1",
         "cookie-parser": "^1.4.5",
