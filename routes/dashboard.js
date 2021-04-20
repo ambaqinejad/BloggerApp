@@ -55,6 +55,10 @@ router.post('/uploadPostImage', dashboardController.uploadPostImage);
 
 router.post('/deletePostImage', dashboardController.deletePostImage);
 
+router.post('/postComment', dashboardController.postComment);
+
+router.post('/getCommentsOf', dashboardController.getCommentsOf)
+
 router.delete('/deletePost', dashboardController.deletePost);
 
 module.exports = router;

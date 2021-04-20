@@ -1,14 +1,18 @@
 let quill;
+let bloggerId;
+let role;
+let articleID;
+
 $(document).ready(function() {
             quill = new Quill("#editor_viewer", {
                 theme: "bubble"
             });
             quill.disable();
 
-            let bloggerId = $("#bloggerId").html().trim();
-            let role = $("#admin").html().trim();
+            bloggerId = $("#bloggerId").html().trim();
+            role = $("#admin").html().trim();
 
-            let articleID = window.location.href.split("/");
+            articleID = window.location.href.split("/");
             articleID = articleID[articleID.length - 1];
             $.ajax({
                         type: "post",
@@ -42,6 +46,33 @@ $(document).ready(function() {
             $('#error').text(err)
         }
     });
+
+    getComments();
+
+    $('#commentForm').submit(function (e) { 
+        e.preventDefault();
+        const comment = $('#comment').val()
+        if(comment === '') {
+            $('#empty-comment-error').text('Please enter a comment.')
+            return false
+        }
+        $('#empty-comment-error').text('');
+        const commentData = {
+            content: comment,
+            commentedBy: bloggerId,
+            forArticle: articleID
+        }
+        fetch("/dashboard/postComment", {
+            body: JSON.stringify(commentData),
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(response => window.location.href = response.url)
+        .catch(err => $('#error').text(err.errMessage))
+    });
 })
 
 function _delete(articleId) {
@@ -54,10 +85,52 @@ function _delete(articleId) {
         })
         .then(response => response.json())
         .then(response => {
-            window.location.href = document.referrer;
+            window.location.href = response.url;
         })
         .catch(err => {
             $('#error').text(err.message)
         })
     }
+}
+
+function getComments() {
+    fetch(`/dashboard/getCommentsOf`, {
+        body: JSON.stringify({articleID}),
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'}
+    })
+    .then(response => response.json())
+    .then(comments => {
+        console.log(comments);
+        let commentsContents = '';
+        comments.forEach(comment => {
+            commentsContents += `
+                <div class='comment-container mb-2'>
+                    <p class='comment-content'><strong>${comment.content}</strong></p>
+                    <div class="row">
+                         <div class="col"></div>
+                         <div class="col-sm-6">
+                             <hr>
+                         </div>
+                         <div class="col"></div>
+                     </div>
+                     <div class='d-flex align-items-end'>
+                         <img src="${comment.commentedBy.avatar ? `images/avatars/${comment.commentedBy.avatar}` : "images/avatars/default.jpg"}" alt="" class="me-2 comment-img"> 
+                         <p class="me-2">${comment.commentedBy.username}</p>
+                         <p>${comment.createdAt.substring(0, 10)}</p>
+
+                    </div>
+                </div>
+            `
+            if(role === 'admin') {
+                commentsContents += `
+                    <div class="d-flex justify-content-end">
+                        <button type="button" id="deleteCommentBtn" class="btn btn-danger mb-2">Delete Comment</button>
+                    </div>
+                `
+            }
+        })
+        $('#all-comments').html(commentsContents)
+    })
+    .catch(err => $('#comment-fetch-error').text(err.errorMessage))
 }

@@ -8,6 +8,7 @@ const multer = require('multer');
 // my own modules
 const Blogger = require(path.join(process.cwd(), 'models', 'blogger.js'));
 const Article = require(path.join(process.cwd(), 'models', 'article.js'));
+const Comment = require(path.join(process.cwd(), 'models', 'comment.js'));
 const redirect = require(path.join(process.cwd(), 'tools', 'redirection.js'));
 const multerInitializer = require(path.join(process.cwd(), 'tools', 'multerInitializer.js'));
 
@@ -144,6 +145,38 @@ const getArticle = (req, res, next) => {
         })
 }
 
+const postComment = (req, res) => {
+    new Comment(req.body).save(err => {
+        if (err) {
+            res.status(500).json({
+                errMessage: 'Something went wrong'
+            })
+        }
+        return res.json({
+            message: 'success',
+            url: `/dashboard/articleDetail/${req.body.forArticle}`
+        });
+    })
+}
+
+const getCommentsOf = (req, res) => {
+    Comment.find({
+        forArticle: req.body.articleID
+    }).populate('commentedBy', {
+        username: true,
+        avatar: true
+    }).sort({
+        createdAt: -1
+    }).exec((err, comments) => {
+        if (err) {
+            return res.status(500).json({
+                errorMessage: 'Something went wrong'
+            })
+        }
+        res.json(comments)
+    })
+}
+
 const updateBlogger = (req, res, next) => {
     const bloggerNewObj = {
         firstName: req.body.firstName || req.session.blogger.firstName,
@@ -278,8 +311,13 @@ const deletePost = async(req, res, next) => {
     const articleId = req.body.articleId;
     try {
         let deletedArticle = await Article.findById(articleId);
-        let deleteInfo = await Article.findByIdAndDelete(articleId);
+        // delete Article
+        await Article.findByIdAndDelete(articleId);
+        // delete comments of this article
+        await Comment.deleteMany({ forArticle: deletedArticle._id })
+            // delete article header image
         fs.unlinkSync(path.join(process.cwd(), 'public', 'images', 'post_header_image', deletedArticle.image))
+            // delete images of content of article 
         const contents = JSON.parse(deletedArticle.content);
         contents.ops.forEach(content => {
             if (content.insert.image) {
@@ -287,7 +325,8 @@ const deletePost = async(req, res, next) => {
             }
         })
         return res.json({
-            message: 'Deleted successfully.'
+            message: 'Deleted successfully.',
+            url: `/dashboard/myPosts/${req.session.blogger._id}`
         })
     } catch (err) {
         return res.status(500).json({
@@ -301,16 +340,21 @@ const deleteBlogger = async(req, res, next) => {
     try {
         const blogger = await Blogger.findById(bloggerID);
         const articles = await Article.find({ postedBy: bloggerID })
-
-        // delete Blogger
+            // delete Blogger
         await Blogger.findByIdAndDelete(bloggerID);
-        // delete Articles
+        // delete Articles of Blogger
         await Article.deleteMany({ postedBy: bloggerID });
+        // delete Comments of Blogger
+        await Comment.deleteMany({ commentedBy: bloggerID });
         // delete blogger avatar
         fs.unlinkSync(path.join(process.cwd(), 'public', 'images', 'avatars', blogger.avatar));
-        // delete header images and post images
-        articles.forEach(article => {
+        // delete header images and post images and comments for all articles of the blogger
+        articles.forEach(async article => {
+            // delete comments of this article
+            await Comment.deleteMany({ forArticle: article._id });
+            // delete header image
             fs.unlinkSync(path.join(process.cwd(), 'public', 'images', 'post_header_image', article.image));
+            // delete post images
             const contents = JSON.parse(article.content);
             contents.ops.forEach(content => {
                 if (content.insert.image) {
@@ -335,6 +379,8 @@ module.exports = {
     getBloggersPage,
     getArticle,
     resetBloggerPassword,
+    postComment,
+    getCommentsOf,
     updateBlogger,
     logout,
     uploadAvatar,

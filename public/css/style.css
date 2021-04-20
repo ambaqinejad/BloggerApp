@@ -33,6 +33,24 @@ hr {
     height: 400px;
 }
 
+.comment-area {
+    max-height: 100px;
+    min-height: 100px;
+    min-width: 100%;
+}
+
+.comment-img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+
+.comment-container {
+    border: 1px solid rgb(100, 100, 100);
+    border-radius: 10px;
+    padding: 10px
+}
+
 
 /* .post-image {} */
 
