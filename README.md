@@ -26,3 +26,10 @@
 4. Deleting Bloggers
 5. Deleting Articles of Bloggers
 6. Deleting Comments of Bloggers
+
+### For Using This Application Run These Commands
+
+1. npm install 
+2. npm start
+3. Open Your Browser
+4. Search URL http://localhost:3000/
